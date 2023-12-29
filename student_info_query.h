@@ -2,7 +2,9 @@
 #define STUDENT_INFO_QUERY_H
 
 #include <QMainWindow>
-#include "dialog.h"
+#include <QSqlTableModel>
+#include<QtSql/QSqlDatabase>
+#include<QDebug>
 namespace Ui {
 class Student_Info_Query;
 }

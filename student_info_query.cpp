@@ -1,16 +1,20 @@
 #include "student_info_query.h"
 #include "ui_student_info_query.h"
 #include "studentinfoadmin.h"
-#include "dialog.h"
+#include <QSqlTableModel>
+#include<QtSql/QSqlDatabase>
+#include<QDebug>
+#include<QMessageBox>
 Student_Info_Query::Student_Info_Query(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Student_Info_Query)
 {
     ui->setupUi(this);
+    //在构造函数实现数据库的连接
     if(this->connect("dormitory_manage_system.db")){
         model=new QSqlTableModel(this);
         model->setTable("studentinfo");
-        model->select();
+        //model->select();
         model->setEditStrategy(QSqlTableModel::OnManualSubmit);//默认手动提交
         ui->ShowResult->setModel(model);
     }
