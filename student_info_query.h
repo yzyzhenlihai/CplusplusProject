@@ -5,6 +5,7 @@
 #include <QSqlTableModel>
 #include<QtSql/QSqlDatabase>
 #include<QDebug>
+#include <QSqlRecord>
 namespace Ui {
 class Student_Info_Query;
 }
@@ -22,6 +23,12 @@ private slots:
     void on_ReturnBtn_clicked();
 
     void on_ShowAllBtn_clicked();
+
+    void on_QueryBtn_clicked();
+
+    void on_AddInfoBtn_clicked();
+
+
 
 private:
     Ui::Student_Info_Query *ui;

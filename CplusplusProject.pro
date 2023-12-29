@@ -13,18 +13,21 @@ SOURCES += \
     administratorwindow.cpp \
     main.cpp \
     dialog.cpp \
+    student_info_add.cpp \
     student_info_query.cpp \
     studentinfoadmin.cpp
 
 HEADERS += \
     administratorwindow.h \
     dialog.h \
+    student_info_add.h \
     student_info_query.h \
     studentinfoadmin.h
 
 FORMS += \
     administratorwindow.ui \
     dialog.ui \
+    student_info_add.ui \
     student_info_query.ui \
     studentinfoadmin.ui
 

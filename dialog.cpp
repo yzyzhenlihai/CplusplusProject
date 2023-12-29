@@ -20,8 +20,8 @@ Dialog::~Dialog()
 
 void Dialog::on_LoginButton_clicked()
 {
-    QString username="root";
-    QString password="123456";
+    QString username="";
+    QString password="";
     if((ui->UserNameLineEdit->text()==username)&&ui->PasswordLineEdit->text()==password){
         AdministratorWindow *adminwin=new AdministratorWindow;
         adminwin->show();
