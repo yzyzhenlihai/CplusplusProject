@@ -3,6 +3,11 @@
 #include <QSqlRecord>
 #include <QMainWindow>
 #include "student_info_query.h"
+#include<QtSql/QSqlDatabase>
+#include<QDebug>
+#include <QSqlRecord>
+#include<QMessageBox>
+#include<QSqlError>
 namespace Ui {
 class Student_Info_Add;
 }
@@ -14,6 +19,7 @@ class Student_Info_Add : public QMainWindow
 public:
     explicit Student_Info_Add(QWidget *parent = nullptr);
     ~Student_Info_Add();
+    bool connect(const QString &dbName);
 
 private slots:
     void on_returnBtn_clicked();
@@ -25,6 +31,7 @@ signals:
 
 private:
     Ui::Student_Info_Add *ui;
+    QSqlTableModel *model;
 };
 
 #endif // STUDENT_INFO_ADD_H

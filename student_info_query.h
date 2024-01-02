@@ -30,6 +30,10 @@ private slots:
 
 
 
+    void on_ModifyBtn_clicked();
+
+    void on_DeleteBtn_clicked();
+
 private:
     Ui::Student_Info_Query *ui;
     QSqlTableModel *model;

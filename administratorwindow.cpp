@@ -2,6 +2,7 @@
 #include "ui_administratorwindow.h"
 #include "dialog.h"
 #include"studentinfoadmin.h"
+#include"student_info_query.h"
 AdministratorWindow::AdministratorWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::AdministratorWindow)
@@ -28,8 +29,8 @@ void AdministratorWindow::on_ReturnLoginBtn_clicked()
 
 void AdministratorWindow::on_StuInfoAdminBtn_clicked()
 {
-    StudentInfoAdmin *stuInfoWin=new StudentInfoAdmin;
-    stuInfoWin->show();
+    Student_Info_Query *queryWin=new Student_Info_Query;
+    queryWin->show();
     this->close();
 }
 

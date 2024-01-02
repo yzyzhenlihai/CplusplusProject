@@ -125,6 +125,32 @@
      <string>添加学生信息</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="ModifyBtn">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>340</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>确认修改</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="DeleteBtn">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>340</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>确认删除</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>
