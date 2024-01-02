@@ -33,8 +33,7 @@ RepairView::~RepairView()
 void RepairView::slotSendNumView(){
     if(ui->DorNumLineEdit->text()!=""){
     QString dornum = ui->DorNumLineEdit->text();
-    QString data = "DOR:" + dornum ;
-
+    QString data = "DOR:" + dornum ;//数据类型标识
     server->write(data.toUtf8());
     }
     else{
@@ -57,12 +56,12 @@ void RepairView::slotReadyRead(){
     // 将结果显示在QTableView上
     QStandardItemModel *model = new QStandardItemModel();
     QStringList headers = {"Num", "Phone", "Fault"};
-    model->setHorizontalHeaderLabels(headers);
+    model->setHorizontalHeaderLabels(headers);//列标题
 
-    QStringList records = result.split("$");
+    QStringList records = result.split("$");//分隔符
     model->removeRows(0, model->rowCount()); // 清除之前的数据
     int row = 0;
-    foreach (const QString &record, records) {
+    foreach (const QString &record, records) {// 遍历每条记录，分割字段并添加到model中
         QStringList fields = record.split(",");
         if (fields.size() == 3) {
             for (int column = 0; column < 3; ++column) {

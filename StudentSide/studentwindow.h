@@ -26,14 +26,14 @@ public:
     ~StudentWindow();
 
 private slots:
-    //void on_pushButton_4_clicked();
 
-    void on_ReturnLoginBtn_clicked();
 
-    void on_RepairBtn_clicked();
+    void on_ReturnLoginBtn_clicked();//返回
 
-    void on_RepairInfoBtn_clicked();
-    void on_ViewInfoBtn_clicked();
+    void on_RepairBtn_clicked();//报修
+
+    void on_RepairInfoBtn_clicked();//报修查看
+    void on_ViewInfoBtn_clicked();//个人信息
 
 private:
     Ui::StudentWindow *ui;

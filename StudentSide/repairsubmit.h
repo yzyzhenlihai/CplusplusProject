@@ -22,24 +22,20 @@ class RepairSubmit : public QMainWindow
 public:
     explicit RepairSubmit(QWidget *parent = nullptr);
     ~RepairSubmit();
-    bool connectdatabase(const QString &dbName);
+    bool connectdatabase(const QString &dbName);//连接数据库
 
 private slots:
-    //void on_pushButton_4_clicked();
 
-    void on_WindowBtn_clicked();
+    void on_WindowBtn_clicked();//返回
 
-   // void on_SubmitBtn_clicked();
 
-    void slotReadyRead();
-    void slotSendNum();
-    //void slotSendPhone();
-    //void slotSendFault();
-    // void on_RepairInfoBtn_clicked();
+    void slotReadyRead();//读服务端来的数据
+    void slotSendNum();//发送信息
+
 private:
     Ui::RepairSubmit *ui;
     QSqlTableModel *model;
-     QTcpSocket* server;
+    QTcpSocket* server;
 };
 
 

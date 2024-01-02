@@ -19,8 +19,14 @@ MainWindow::MainWindow(QWidget *parent)
     m_server = new QTcpServer(this);
     m_server -> listen(QHostAddress::Any,8000);
     connect(m_server,&QTcpServer::newConnection,this,&MainWindow::newConnection);
-
+    this->hide();
 }
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
 
 void MainWindow::newConnection()
 {
@@ -37,7 +43,6 @@ void MainWindow::readyRead(){
     if (m_client == NULL) {
         return;
     }
-    QString tmp;
     QByteArray array = m_client->readAll();
 
     // 检查接收到的数据类型
@@ -72,10 +77,10 @@ void MainWindow::readyRead(){
     else if (array.startsWith("NUM:")) {
         QString data = QString::fromUtf8(array);
         QString data1 = data.mid(4);
-        QStringList dataList = data1.split(" ");
-        QString num = dataList[0]; // 第一个空格后面是维修编号
-        QString phone = dataList[1]; // 第二个空格后面是电话号码
-        QString fault = dataList[2]; // 第三个空格后面是故障描述
+        QStringList dataList = data1.split("$");
+        QString num = dataList[0]; // 维修编号
+        QString phone = dataList[1]; // 电话号码
+        QString fault = dataList[2]; // 故障描述
         // 处理num、phone、fault的逻辑
         //if (connectdatabase("dormitory_manage_system.db")) {
             QSqlTableModel model(this);
@@ -106,7 +111,7 @@ void MainWindow::readyRead(){
        m_client->disconnectFromHost();
     }
 
-    else if (array.startsWith("DOR:")) {
+    else if (array.startsWith("DOR:")) {//报修查看
         QString data = QString::fromUtf8(array);
         QString dornum = data.mid(4);
         QSqlTableModel model(this);
@@ -186,7 +191,6 @@ void MainWindow::clientDisconnected()
 
 bool MainWindow::connectdatabase(const QString& dbName){
     qDebug() << QSqlDatabase::drivers();//打印数据库驱动
-    //打开Mysql
     QSqlDatabase db=QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(dbName);
     bool ok=db.open();
@@ -195,8 +199,3 @@ bool MainWindow::connectdatabase(const QString& dbName){
 }
 
 
-
-MainWindow::~MainWindow()
-{
-    delete ui;
-}

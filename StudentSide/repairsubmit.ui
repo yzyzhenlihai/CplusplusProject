@@ -16,8 +16,8 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>229</x>
-     <y>170</y>
+     <x>129</x>
+     <y>90</y>
      <width>71</width>
      <height>20</height>
     </rect>
@@ -29,8 +29,8 @@
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>229</x>
-     <y>220</y>
+     <x>129</x>
+     <y>140</y>
      <width>71</width>
      <height>20</height>
     </rect>
@@ -42,8 +42,8 @@
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
-     <x>229</x>
-     <y>270</y>
+     <x>130</x>
+     <y>190</y>
      <width>71</width>
      <height>20</height>
     </rect>
@@ -55,38 +55,28 @@
   <widget class="QLineEdit" name="RepairNum">
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>170</y>
-     <width>113</width>
-     <height>20</height>
+     <x>200</x>
+     <y>90</y>
+     <width>121</width>
+     <height>31</height>
     </rect>
    </property>
   </widget>
   <widget class="QLineEdit" name="Repairphone">
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>220</y>
-     <width>113</width>
-     <height>20</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="RepairFault">
-   <property name="geometry">
-    <rect>
-     <x>300</x>
-     <y>270</y>
-     <width>113</width>
-     <height>20</height>
+     <x>200</x>
+     <y>140</y>
+     <width>121</width>
+     <height>31</height>
     </rect>
    </property>
   </widget>
   <widget class="QPushButton" name="SubmitBtn">
    <property name="geometry">
     <rect>
-     <x>170</x>
-     <y>340</y>
+     <x>190</x>
+     <y>360</y>
      <width>80</width>
      <height>18</height>
     </rect>
@@ -98,14 +88,24 @@
   <widget class="QPushButton" name="WindowBtn">
    <property name="geometry">
     <rect>
-     <x>390</x>
-     <y>340</y>
+     <x>410</x>
+     <y>360</y>
      <width>80</width>
      <height>18</height>
     </rect>
    </property>
    <property name="text">
     <string>返回</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="RepairFault">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>190</y>
+     <width>281</width>
+     <height>51</height>
+    </rect>
    </property>
   </widget>
  </widget>

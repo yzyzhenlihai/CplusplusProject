@@ -16,7 +16,7 @@ StudentLogin::StudentLogin(QWidget *parent)
     server = new QTcpSocket(this);
     server->connectToHost(QHostAddress("127.0.0.1"),8000);
     connect(server ,&QTcpSocket::readyRead,this,&StudentLogin::slotReadyRead);
-    connect(ui->LoginButton,&QPushButton::clicked,this,&StudentLogin::slotSendId);
+    connect(ui->LoginButton,&QPushButton::clicked,this,&StudentLogin::slotSendId);//登录
 
 }
 
@@ -29,8 +29,8 @@ StudentLogin::~StudentLogin()
 void StudentLogin::slotReadyRead(){
     QByteArray array = server->readAll();
 
-    qDebug()<<array;
-    if (array == "ok"){
+    //qDebug()<<array;
+    if (array == "ok"){//登陆成功
             StudentWindow *stuwin=new StudentWindow;
             stuwin->show();
             this->close();
@@ -49,7 +49,7 @@ void StudentLogin::slotSendId(){
         QString id = ui->UserNameLineEdit->text();
         QString password = ui->PasswordLineEdit->text();
 
-        QString data = "ID:" + id + " " + password ;
+        QString data = "ID:" + id + " " + password ;//添加标识符
         server->write(data.toUtf8());
 
         ui->UserNameLineEdit->clear();

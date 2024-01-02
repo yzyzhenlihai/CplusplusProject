@@ -22,7 +22,7 @@ class StudentLogin : public QWidget
 public:
     StudentLogin(QWidget *parent = nullptr);
     ~StudentLogin();
-    //bool connect(const QString &dbName);
+
 
 private:
     Ui::StudentLogin *ui;
@@ -32,9 +32,8 @@ private:
 
 
 public slots:
-    void slotReadyRead();
-    void slotSendId();
-    //void slotSendPassword();
+    void slotReadyRead();//读
+    void slotSendId();//发
 
 
 

@@ -14,8 +14,8 @@ StudentView::StudentView(QWidget *parent)
     server = new QTcpSocket(this);
     server->connectToHost(QHostAddress("127.0.0.1"),8000);
     connect(server ,&QTcpSocket::readyRead,this,&StudentView::slotReadyRead);
-    connect(ui->StuInfoBtn,&QPushButton::clicked,this,&StudentView::slotSendInfo);
-    connect(ui->PasswordBtn,&QPushButton::clicked,this,&StudentView::slotSendPass);
+    connect(ui->StuInfoBtn,&QPushButton::clicked,this,&StudentView::slotSendInfo);//请求查看信息
+    connect(ui->PasswordBtn,&QPushButton::clicked,this,&StudentView::slotSendPass);//修改密码
 
 }
 
@@ -39,11 +39,11 @@ void StudentView::on_ReturnwinBtn_clicked()
 void StudentView::slotReadyRead(){
     QByteArray array = server->readAll();
     qDebug()<<array;
-    if (array.startsWith("ID:")){
+    if (array.startsWith("ID:")){//查看信息
         qDebug()<<array;
-        QMessageBox::information(this,"1",array);
+        QMessageBox::information(this,"information",array);
     }
-    else if(array=="passwordsuccess"){
+    else if(array=="passwordsuccess"){//修改成功
         QString dlgTitle="success";
         QString strInfo="修改成功!";
         QMessageBox::information(this,dlgTitle,strInfo);
@@ -74,7 +74,7 @@ void StudentView::slotSendPass(){
 
 void StudentView::slotSendInfo(){
 
-    QString data = "Infoview" ; // 在数据前面添加"NUM:"作为数据类型标识
+    QString data = "Infoview" ;
     server->write(data.toUtf8());
 
 }

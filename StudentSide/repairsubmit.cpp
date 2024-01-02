@@ -13,10 +13,9 @@ RepairSubmit::RepairSubmit(QWidget *parent)
     ui->setupUi(this);
     server = new QTcpSocket(this);
     server->connectToHost(QHostAddress("127.0.0.1"),8000);
-    connect(server ,&QTcpSocket::readyRead,this,&RepairSubmit::slotReadyRead);
-    connect(ui->SubmitBtn,&QPushButton::clicked,this,&RepairSubmit::slotSendNum);
-   // connect(ui->SubmitBtn,&QPushButton::clicked,this,&RepairSubmit::slotSendPhone);
-    //connect(ui->SubmitBtn,&QPushButton::clicked,this,&RepairSubmit::slotSendFault);
+    connect(server ,&QTcpSocket::readyRead,this,&RepairSubmit::slotReadyRead);//接收消息
+    connect(ui->SubmitBtn,&QPushButton::clicked,this,&RepairSubmit::slotSendNum);//提交
+
 }
 
 RepairSubmit::~RepairSubmit()
@@ -28,7 +27,7 @@ RepairSubmit::~RepairSubmit()
 
 
 
-void RepairSubmit::on_WindowBtn_clicked()
+void RepairSubmit::on_WindowBtn_clicked()//返回
 {
     StudentWindow *windowwin=new StudentWindow;
     windowwin->show();
@@ -37,8 +36,8 @@ void RepairSubmit::on_WindowBtn_clicked()
 
 
 void RepairSubmit::slotReadyRead(){
-    QByteArray array = server->readAll();
-    qDebug()<<array;
+    QByteArray array = server->readAll();//接收数据
+    //qDebug()<<array;
     if (array == "insertsuccess"){
         QString dlgTitle="success";
         QString strInfo="提交成功!";
@@ -60,10 +59,10 @@ void RepairSubmit::slotReadyRead(){
 void RepairSubmit::slotSendNum(){
     QString num = ui->RepairNum->text();
     QString phone = ui->Repairphone->text();
-    QString fault = ui->RepairFault->text();
+    QString fault = ui->RepairFault->toPlainText();
     if(num!="" &&phone != "" && fault!=""){
 
-    QString data = "NUM:" + num + " " + phone + " " + fault; // 在数据前面添加"NUM:"作为数据类型标识
+    QString data = "NUM:" + num + "$" + phone + "$" + fault; // 在数据前面添加"NUM:"作为数据类型标识
     server->write(data.toUtf8());
 
     ui->RepairNum->clear();

@@ -30,12 +30,12 @@ private:
 
     QTcpSocket* server;
 private slots:
-    void on_ReturnwinBtn_clicked();
+    void on_ReturnwinBtn_clicked();//返回
 
 public slots:
-    void slotReadyRead();
-   void slotSendInfo();
-    void slotSendPass();
+    void slotReadyRead();//读
+   void slotSendInfo();//发送查询信息
+    void slotSendPass();//发送修改密码信息
 
 
 

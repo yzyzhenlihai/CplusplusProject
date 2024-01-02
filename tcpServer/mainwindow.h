@@ -38,7 +38,7 @@ private:
     QTcpServer* m_server;
     QTcpSocket* m_client;
     QSqlTableModel *model;
-    QString m_receivedId;
+    QString m_receivedId;//保存id
 private:
     Ui::MainWindow *ui;
 };

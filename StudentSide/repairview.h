@@ -21,7 +21,7 @@ class RepairView : public QWidget
 public:
     RepairView(QWidget *parent = nullptr);
     ~RepairView();
-   //bool connectdatabase(const QString &dbName);
+
 
 private:
     Ui::RepairView *ui;
@@ -29,14 +29,11 @@ private:
 
     QTcpSocket* server;
 private slots:
-           void on_ReturnwinBtn_clicked();
+        void on_ReturnwinBtn_clicked();//返回
 
 public slots:
-    void slotReadyRead();
-    void slotSendNumView();
-
-
-
+    void slotReadyRead();//读服务端数据
+    void slotSendNumView();//发送数据
 
 };
 #endif // REPAIRVIEW_H
