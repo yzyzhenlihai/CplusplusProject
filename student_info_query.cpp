@@ -74,6 +74,7 @@ void Student_Info_Query::on_ShowAllBtn_clicked()
 
 void Student_Info_Query::on_QueryBtn_clicked()
 {
+
     QString queryType=ui->QueryChoice->currentText();//获得查询类型
     QString queryContent=ui->lineEdit->text();//获得查询内容
     //查询
@@ -82,7 +83,7 @@ void Student_Info_Query::on_QueryBtn_clicked()
         QString sql="id="+queryContent;
         model->setFilter(sql);
     }else if(queryType=="按宿舍号"){
-         model->setFilter("");
+        model->setFilter("");
         QString sql="roomnumber="+queryContent;
         model->setFilter(sql);
     }

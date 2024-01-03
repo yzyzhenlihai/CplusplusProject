@@ -22,6 +22,8 @@ private slots:
 
     void on_StuInfoAdminBtn_clicked();
 
+    void on_DormitoryInfoAdminBtn_clicked();
+
 private:
     Ui::AdministratorWindow *ui;
 };

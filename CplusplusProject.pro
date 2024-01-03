@@ -11,8 +11,10 @@ CONFIG += c++17
 
 SOURCES += \
     administratorwindow.cpp \
+    dormitory_info_admin.cpp \
     main.cpp \
     dialog.cpp \
+    mybutton.cpp \
     student_info_add.cpp \
     student_info_query.cpp \
     studentinfoadmin.cpp
@@ -20,6 +22,8 @@ SOURCES += \
 HEADERS += \
     administratorwindow.h \
     dialog.h \
+    dormitory_info_admin.h \
+    mybutton.h \
     student_info_add.h \
     student_info_query.h \
     studentinfoadmin.h
@@ -27,6 +31,7 @@ HEADERS += \
 FORMS += \
     administratorwindow.ui \
     dialog.ui \
+    dormitory_info_admin.ui \
     student_info_add.ui \
     student_info_query.ui \
     studentinfoadmin.ui
