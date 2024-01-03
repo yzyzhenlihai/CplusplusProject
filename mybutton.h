@@ -15,7 +15,6 @@ public:
     void setName(QString name);
     int getIndex();
 
-
 private slots:
     void clickButton();//槽函数，
 };

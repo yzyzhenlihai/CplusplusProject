@@ -23,7 +23,13 @@ Dormitory_Info_Admin::~Dormitory_Info_Admin()
 {
     delete ui;
 }
-
+//delete已经创建的按钮
+void Dormitory_Info_Admin::delButtons(){
+    for(Mybutton* button : buttons) {
+        button->deleteLater();
+    }
+    buttons.clear();
+}
 //连接数据库
 bool Dormitory_Info_Admin::connectDatabase(const QString &dbName){
     qDebug() << QSqlDatabase::drivers();//打印数据库驱动
@@ -60,27 +66,33 @@ void Dormitory_Info_Admin::initButton(){
     //对按钮进行初始化
 
     for(int i=0;i<row;i++){
-        buttons[i]=new Mybutton(i);
-        buttons[i]->setName("查看详情");
-        buttons[i]->setProperty("row",i); //为按钮设置row属性
+        Mybutton* button = new Mybutton(i);
+        button->setName("查看详情");
+        buttons.append(button);
 
     }
-    //实现信号和槽函数连接
+    // //实现信号和槽函数连接
     for(int i=0;i<row;i++){
         connect(buttons[i],SIGNAL(click()),buttons[i],SLOT(clickButton()));
     }
 
-    //添加按钮到model
+    // //添加按钮到model
     for(int i=0;i<row;i++){
 
         ui->ShowResult->setIndexWidget(model->index(i,column-1),buttons[i]);
     }
+    // Mybutton* button = new Mybutton(1);
+    // button->setName("查看详情");
+    // ui->ShowResult->setIndexWidget(model->index(0,2),button);
+    // Mybutton* button2 = new Mybutton(1);
+    // button2->setName("查看详情");
+    // ui->ShowResult->setIndexWidget(model->index(1,2),button2);
 }
 
 //显示全表按钮
 void Dormitory_Info_Admin::on_ShowAllBtn_clicked()
 {
-
+    delButtons();
     model->setTable("dormitoryinfo");
     model->select();
     initButton();
@@ -99,6 +111,7 @@ void Dormitory_Info_Admin::on_ReturnBtn_clicked()
 
 void Dormitory_Info_Admin::on_QueryBtn_clicked()
 {
+    delButtons();
     QString queryType=ui->QueryChoice->currentText();//获得查询类型
     QString queryEdit=ui->QueryEdit->text();
     if(queryEdit==""){
@@ -111,7 +124,7 @@ void Dormitory_Info_Admin::on_QueryBtn_clicked()
         initButton();
 
     }
-    //addbutton();
+
 
 }
 
