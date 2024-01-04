@@ -25,6 +25,7 @@ private slots:
     void on_returnBtn_clicked();
 
     void on_addCommit_clicked();
+    void receive_add_info(QString);//收到添加个人信息的槽
 signals:
     //定义消息
     void sendRecord(QSqlRecord* record);//子窗口发送要添加的记录给主窗口
@@ -32,6 +33,7 @@ signals:
 private:
     Ui::Student_Info_Add *ui;
     QSqlTableModel *model;
+    QString returnWay;
 };
 
 #endif // STUDENT_INFO_ADD_H

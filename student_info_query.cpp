@@ -71,7 +71,7 @@ void Student_Info_Query::on_ShowAllBtn_clicked()
 
 }
 
-
+//查询按钮
 void Student_Info_Query::on_QueryBtn_clicked()
 {
 

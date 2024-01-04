@@ -94,19 +94,6 @@
      <string>查询</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="AddInfoBtn">
-    <property name="geometry">
-     <rect>
-      <x>160</x>
-      <y>350</y>
-      <width>81</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>添加宿舍成员</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="ReturnBtn">
     <property name="geometry">
      <rect>

@@ -10,6 +10,7 @@
 #include<QSqlTableModel>
 #include"mybutton.h"
 #include<QVector>
+#include"dormitory_personnel_details.h"
 namespace Ui {
 class Dormitory_Info_Admin;
 }
@@ -33,10 +34,16 @@ private slots:
 
     void on_QueryBtn_clicked();
 
+    void clickButton();//槽函数，查看详情按钮
+
+signals:
+    void sendRoomnumber(QString);//向子窗体发送宿舍号
 private:
     Ui::Dormitory_Info_Admin *ui;
     QSqlTableModel *model;
     QVector<Mybutton*> buttons;
+
+
 };
 
 #endif // DORMITORY_INFO_ADMIN_H

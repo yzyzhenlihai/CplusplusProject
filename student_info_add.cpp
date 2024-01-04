@@ -1,4 +1,5 @@
 #include "student_info_add.h"
+#include "dormitory_personnel_details.h"
 #include "ui_student_info_add.h"
 #include "student_info_query.h"
 #include <QMessageBox>
@@ -53,12 +54,24 @@ bool Student_Info_Add::connect(const QString& dbName){
 //添加学生界面返回按钮
 void Student_Info_Add::on_returnBtn_clicked()
 {
-    Student_Info_Query *queryWin=new Student_Info_Query;
-    queryWin->show();
-    delete this;
+    if(returnWay=="添加宿舍成员"){
+        //返回宿舍信息管理的界面
+        Dormitory_Personnel_Details* detailWin=new Dormitory_Personnel_Details;
+        //detailWin->show();
+        this->close();
+    }else{
+        Student_Info_Query *queryWin=new Student_Info_Query;
+        //queryWin->show();
+        this->close();
+    }
+
+
 }
-
-
+//收到添加个人信息的槽
+void Student_Info_Add::receive_add_info(QString returnWay){
+    this->returnWay=returnWay;
+}
+//信息提交按钮
 void Student_Info_Add::on_addCommit_clicked()
 {
     QString id=ui->idEdit->text();
@@ -96,9 +109,16 @@ void Student_Info_Add::on_addCommit_clicked()
         //提示添加成功
         QMessageBox::information(this,"个人信息添加","个人信息添加成功！",QMessageBox::Ok);
         //回到查询界面
-        Student_Info_Query *queryWin=new Student_Info_Query;
-        queryWin->show();
-        this->close();
+        if(returnWay=="添加宿舍成员"){
+            //返回宿舍信息管理的界面
+            Dormitory_Personnel_Details* detailWin=new Dormitory_Personnel_Details;
+            detailWin->show();
+            this->close();
+        }else{
+            Student_Info_Add *addWin=new Student_Info_Add;
+            addWin->show();
+            this->close();
+        }
     }else if(result==QMessageBox::Cancel){
         //取消添加
         model->revertAll();

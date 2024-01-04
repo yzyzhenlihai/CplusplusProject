@@ -4,6 +4,7 @@
 #include <QWidget>
 #include<QPushButton>
 #include<QMessageBox>
+#include<QDebug>
 class Mybutton : public QPushButton
 {
     Q_OBJECT
@@ -11,12 +12,13 @@ public:
     Mybutton();
     Mybutton(int i,QWidget*parent=nullptr);
     ~Mybutton();
-    int index;//按钮的标号
     void setName(QString name);
     int getIndex();
-
-private slots:
-    void clickButton();//槽函数，
+    void mousePressEvent(QMouseEvent *event);
+private:
+    int index;//按钮的标号
+signals:
+    void click();
 };
 
 #endif // MYBUTTON_H

@@ -15,10 +15,11 @@ void Mybutton::setName(QString name){
     this->setText(name);
 }
 
-//槽函数
-void Mybutton::clickButton(){
-    Mybutton *btn=(Mybutton*)sender();//获得发出信号的对象
-    QString row=btn->property("row").toString();//获得按钮的row属性
-    QString info="此时的按钮在第"+row+"行";
-    QMessageBox::information(this,"消息",info,QMessageBox::Ok);
+
+void Mybutton::mousePressEvent(QMouseEvent *event) {
+    // Handle the mouse press event
+    // Emit the click signal when the button is clicked
+    emit click();//发出点击信号
+    // Call the base class implementation
+    QPushButton::mousePressEvent(event);
 }
