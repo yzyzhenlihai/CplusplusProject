@@ -16,6 +16,7 @@ public:
     int getIndex();
     void mousePressEvent(QMouseEvent *event);
 private:
+
     int index;//按钮的标号
 signals:
     void click();

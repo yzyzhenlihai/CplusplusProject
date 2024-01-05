@@ -24,7 +24,6 @@ public:
     ~Dormitory_Info_Admin();
     bool connectDatabase(const QString &dbName);
     void initButton();//为每一条记录创建一个按钮
-    void addButton();
     void delButtons();
 
 private slots:

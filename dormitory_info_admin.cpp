@@ -90,17 +90,7 @@ void Dormitory_Info_Admin::initButton(){
 
         ui->ShowResult->setIndexWidget(model->index(i,column-1),buttons[i]);
     }
-    // Mybutton* button = new Mybutton(1);
-    // button->setName("查看详情");
-    // ui->ShowResult->setIndexWidget(model->index(0,2),button);
-    // bool result=connect(button,SIGNAL(click()),button,SLOT(clickButton()));
-    // if(!result){
-    //         qDebug()<<"槽函数连接失败！";
-    //     }
-    // Mybutton* button2 = new Mybutton(1);
-    // button2->setName("查看详情");
-    // ui->ShowResult->setIndexWidget(model->index(1,2),button2);
-    // connect(button2,SIGNAL(click()),button2,SLOT(clickButton()));
+
 }
 
 //显示全表按钮
@@ -117,6 +107,7 @@ void Dormitory_Info_Admin::on_ShowAllBtn_clicked()
 void Dormitory_Info_Admin::clickButton(){
     Mybutton *btn=qobject_cast<Mybutton*>(sender());//获得发出信号的对象
     if(btn){
+
         Dormitory_Personnel_Details *detailWin=new Dormitory_Personnel_Details;
         detailWin->show();
         //建立与新窗体的连接
