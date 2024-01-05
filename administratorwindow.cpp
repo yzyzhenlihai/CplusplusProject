@@ -43,3 +43,11 @@ void AdministratorWindow::on_DormitoryInfoAdminBtn_clicked()
     this->close();
 }
 
+
+void AdministratorWindow::on_RepairProcessBtn_clicked()
+{
+    Repair_Process_Admin *repairWin=new Repair_Process_Admin;
+    repairWin->show();
+    this->close();
+}
+

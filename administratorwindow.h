@@ -2,7 +2,7 @@
 #define ADMINISTRATORWINDOW_H
 
 #include <QMainWindow>
-
+#include"repair_process_admin.h"
 namespace Ui {
 class AdministratorWindow;
 }
@@ -23,6 +23,8 @@ private slots:
     void on_StuInfoAdminBtn_clicked();
 
     void on_DormitoryInfoAdminBtn_clicked();
+
+    void on_RepairProcessBtn_clicked();
 
 private:
     Ui::AdministratorWindow *ui;

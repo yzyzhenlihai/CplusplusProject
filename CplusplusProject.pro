@@ -1,5 +1,6 @@
 QT       += core gui
 QT       += sql
+QT       +=network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 
@@ -19,7 +20,8 @@ SOURCES += \
     repair_process_admin.cpp \
     student_info_add.cpp \
     student_info_query.cpp \
-    studentinfoadmin.cpp
+    studentinfoadmin.cpp \
+    tcpserver.cpp
 
 HEADERS += \
     administratorwindow.h \
@@ -30,7 +32,8 @@ HEADERS += \
     repair_process_admin.h \
     student_info_add.h \
     student_info_query.h \
-    studentinfoadmin.h
+    studentinfoadmin.h \
+    tcpserver.h
 
 FORMS += \
     administratorwindow.ui \
@@ -40,7 +43,8 @@ FORMS += \
     repair_process_admin.ui \
     student_info_add.ui \
     student_info_query.ui \
-    studentinfoadmin.ui
+    studentinfoadmin.ui \
+    tcpserver.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

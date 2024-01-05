@@ -63,6 +63,7 @@ void Dormitory_Info_Admin::initButton(){
     int column=model->columnCount();//获得列数
     qDebug()<<row<<" "<<column;
 
+
     //对按钮进行初始化
 
     for(int i=0;i<row;i++){
