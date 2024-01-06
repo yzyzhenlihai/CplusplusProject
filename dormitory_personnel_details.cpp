@@ -14,6 +14,8 @@ Dormitory_Personnel_Details::Dormitory_Personnel_Details(QWidget *parent)
         model->setTable("studentinfo");
         model->setEditStrategy(QSqlTableModel::OnManualSubmit);//默认手动提交
         ui->ShowDormitoryInfo->setModel(model);
+        ui->ShowDormitoryInfo->hideColumn(11);
+
     }
 }
 
@@ -30,6 +32,7 @@ void Dormitory_Personnel_Details::receiveRoomnumber(QString roomnumber){
     model->setFilter(sql);
     model->select();
     ui->TitleLabel->setText(roomnumber);
+    ui->ShowDormitoryInfo->hideColumn(4);
 
 }
 //连接数据库
@@ -75,6 +78,9 @@ void Dormitory_Personnel_Details::on_ShowAllStu_clicked()
     QString sql="roomnumber="+roomnumber;
     model->setFilter(sql);
     model->select();
+    ui->ShowDormitoryInfo->hideColumn(11);//隐藏图片列
+
+
 }
 
 //确认修改按钮

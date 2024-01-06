@@ -1,6 +1,6 @@
 #ifndef ADMINISTRATORWINDOW_H
 #define ADMINISTRATORWINDOW_H
-
+#include<QtWidgets>
 #include <QMainWindow>
 #include"repair_process_admin.h"
 namespace Ui {

@@ -70,7 +70,7 @@ void Student_Info_Query::on_ShowAllBtn_clicked()
     delButton();
     model->setTable("studentinfo");
     model->select();
-    ui->ShowResult->hideColumn(10);//隐藏图片列
+    ui->ShowResult->hideColumn(11);//隐藏图片列
     initButton();
 
 }

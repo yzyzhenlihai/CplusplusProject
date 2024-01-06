@@ -19,7 +19,7 @@ TcpServer::~TcpServer()
     delete ui;
 }
 
-
+//创建与客户端通信的socket
 void TcpServer::newConnection()
 {
     if(m_client == NULL){
@@ -30,12 +30,13 @@ void TcpServer::newConnection()
     }
 }
 
-
+//读取客户端来的数据
 void TcpServer::readyRead(){
 
     if (m_client == NULL) {
         return;
     }
+    //二进制类型
     QByteArray array = m_client->readAll();
 
     // 检查接收到的数据类型

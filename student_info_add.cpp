@@ -85,6 +85,7 @@ void Student_Info_Add::on_addCommit_clicked()
     QString roomnumber=ui->roomnumberEdit->text();
     QString bednumber=ui->roomnumberEdit->text();
     QString password=ui->passwordEdit->text();
+    QString picture=ui->pictureEdit->text();
     //获得一条空记录
     QSqlRecord rec=model->record();
     rec.setValue(model->fieldIndex("id"),id);
@@ -97,6 +98,7 @@ void Student_Info_Add::on_addCommit_clicked()
     rec.setValue(model->fieldIndex("roomnumber"),roomnumber);
     rec.setValue(model->fieldIndex("bednumber"),bednumber);
     rec.setValue(model->fieldIndex("password"),password);
+    rec.setValue(model->fieldIndex("picture"),picture);
     //插入到模型的最后
     model->insertRecord(model->rowCount(),rec);
     //确认是否添加
@@ -132,7 +134,8 @@ void Student_Info_Add::on_addCommit_clicked()
 }
 //接受图片字符串
 void Student_Info_Add::receivePicture(QByteArray picture){
-    ui->pictureEdit->textEdited(picture);
+    ui->pictureEdit->setText(picture);
+
 }
 //添加图片按钮
 void Student_Info_Add::on_addPictureBtn_clicked()
@@ -155,8 +158,14 @@ void Student_Info_Add::on_addPictureBtn_clicked()
         buffer.close();
         file.close();
         //添加至数据库
-        connect(this,SIGNAL(sendPicture(QByteArray)),this,SLOT(receivePicture(QByteArray)));
-        emit(sendPicture(compressedData));
+        bool ok=connect(this,SIGNAL(sendPicture(QByteArray)),this,SLOT(receivePicture(QByteArray)));
+        if(!ok){
+            qDebug()<<"图片传输连接不成功！";
+        }else{
+            emit(sendPicture(compressedData.toBase64()));
+        }
+
+
 
     }
 
