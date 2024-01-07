@@ -4,12 +4,12 @@
 TcpServer::TcpServer(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::TcpServer),
-    m_server(NULL),
-    m_client(NULL)
+    m_server(NULL)
 {
     ui->setupUi(this);
     m_server = new QTcpServer(this);
     m_server -> listen(QHostAddress::Any,8000);
+    //接收到数据发出信号，然后与自定义槽函数进行连接
     connect(m_server,&QTcpServer::newConnection,this,&TcpServer::newConnection);
     this->hide();
 }
@@ -22,17 +22,19 @@ TcpServer::~TcpServer()
 //创建与客户端通信的socket
 void TcpServer::newConnection()
 {
-    if(m_client == NULL){
+    QTcpSocket* m_client=nullptr;
+    if(m_client == nullptr){
         m_client= m_server->nextPendingConnection();
         connect(m_client, &QTcpSocket::readyRead, this, &TcpServer::readyRead);
-
         connect(m_client, &QTcpSocket::disconnected, this, &TcpServer::clientDisconnected);
+        m_clients.append(m_client);//将socket加入容器
     }
 }
 
 //读取客户端来的数据
 void TcpServer::readyRead(){
-
+    QTcpSocket* m_client=static_cast<QTcpSocket*>(sender());//获得发起请求的socket
+    qDebug()<<m_client;
     if (m_client == NULL) {
         return;
     }
@@ -46,8 +48,9 @@ void TcpServer::readyRead(){
         QString data1 = data.mid(3);
         QStringList dataList = data1.split(" ");
         QString id = dataList[0];
-        m_receivedId =id;
-
+        //m_receivedId =id;
+        m_client->setProperty("ID",id);
+        //qDebug()<<id;
         QString password = dataList[1];
         // 处理id的逻辑
         if (connectdatabase("dormitory_manage_system.db")) {
@@ -58,14 +61,14 @@ void TcpServer::readyRead(){
             model.setFilter(QString("id = '%1' AND password = '%2'").arg(id).arg(password));
             model.select();
             if (model.rowCount() > 0) {
-                m_client->write("ok"); // 向客户端发送"ok"表示成功登录
+                m_client->write("Login:ok"); // 向客户端发送"ok"表示成功登录
                 // 添加处理成功登录的代码，比如打开学生窗口
 
             } else {
-                m_client->write("invalid"); // 向客户端发送"invalid"表示登录失败
+                m_client->write("Login:invalid"); // 向客户端发送"invalid"表示登录失败
             }
         }
-        m_client->disconnectFromHost();
+        //m_client->disconnectFromHost();
     }
 
     else if (array.startsWith("NUM:")) {
@@ -78,7 +81,7 @@ void TcpServer::readyRead(){
         QString phone = dataList[3]; // 电话号码
         QString repairtime = dataList[4]; // 提交时间
         QString state = "待处理";        // 处理num、phone、fault的逻辑
-        //if (connectdatabase("dormitory_manage_system.db")) {
+
         QSqlTableModel model(this);
         model.setTable("repairprocess");
         model.setEditStrategy(QSqlTableModel::OnManualSubmit);
@@ -94,20 +97,20 @@ void TcpServer::readyRead(){
         if (model.insertRecord(-1, record)) { // 在最后插入记录
             if (model.submitAll()) {
                 // 插入成功
-                m_client->write("insertsuccess");
+                m_client->write("RepairSubmit:insertsuccess");
                     // QString dlgTitle="information";
                     // QString strInfo="您有新的报修待处理!";
                     // QMessageBox::information(this,dlgTitle,strInfo);
             } else {
                 // 提交失败
-                m_client->write("invalid");
+                m_client->write("RepairSubmit:invalid");
             }
         } else {
-            m_client->write("invalid");
+            m_client->write("RepairSubmit:invalid");
         }
 
         // }
-        m_client->disconnectFromHost();
+        //m_client->disconnectFromHost();
     }
 
     else if (array.startsWith("DOR:")) {//报修查看
@@ -118,7 +121,7 @@ void TcpServer::readyRead(){
         model.setFilter("RoomNumber = '" + dornum + "'");
         model.select();
             // 构建要发送给客户端的查询结果
-        QString resultData;
+        QString resultData="RepairResult,";
         if (model.rowCount() > 0) {
             for (int i = 0; i < model.rowCount(); ++i) {
                 QSqlRecord record = model.record(i);
@@ -132,7 +135,7 @@ void TcpServer::readyRead(){
                 resultData +=  num + "," +repairtype + "," + fault + "," + phone + ","+repairtime + ","  + state + "$";
             }
         } else {
-            resultData = "No records found" ;
+            resultData += "No records found" ;
         }
         m_client->write(resultData.toUtf8());
     }
@@ -140,6 +143,8 @@ void TcpServer::readyRead(){
     else if (array=="Infoview"){//信息查询
         QSqlTableModel model;
         model.setTable("studentinfo");
+        QString m_receivedId=m_client->property("ID").toString();
+        qDebug()<<m_receivedId;
         model.setFilter(QString("id = '%1'").arg(m_receivedId));
         model.select();
         QString resultData;
@@ -170,6 +175,8 @@ void TcpServer::readyRead(){
         if (!newpassword.isEmpty()) {
             QSqlTableModel model;
             model.setTable("studentinfo");
+            QString m_receivedId=m_client->property("ID").toString();
+            qDebug()<<m_receivedId;
             model.setFilter(QString("id = '%1'").arg(m_receivedId));
             model.select();
             model.setData(model.index(0, model.fieldIndex("password")), newpassword);
@@ -184,18 +191,19 @@ void TcpServer::readyRead(){
         QByteArray imageData = array.mid(4).toBase64();  // 从数据中提取图片数据部分
         QSqlTableModel model;
         model.setTable("studentinfo");
+        QString m_receivedId=m_client->property("ID").toString();
+        qDebug()<<m_receivedId;
         model.setFilter(QString("id = '%1'").arg(m_receivedId));
         model.select();
         model.setData(model.index(0, model.fieldIndex("picture")), imageData);
         model.submitAll();
+        m_client->write("PictureModifySuccess");
 
     }
-
-
     else {
         // 如果接收到未知类型的数据
         m_client->write("invalid"); // 向客户端发送无效消息
-        m_client->disconnectFromHost();
+        //m_client->disconnectFromHost();
     }
 
 
@@ -204,8 +212,12 @@ void TcpServer::readyRead(){
 
 void TcpServer::clientDisconnected()
 {
-    m_client->deleteLater();  // 清理断开连接的客户端对象
-    m_client = NULL;  // 重置客户端指针
+    QTcpSocket* m_client=static_cast<QTcpSocket*>(sender());
+    if(!m_client){
+        return;
+    }
+    m_clients.removeOne(m_client);//从容器中移除
+    m_client->deleteLater();//销毁对象
 }
 
 
