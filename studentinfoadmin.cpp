@@ -8,6 +8,16 @@ StudentInfoAdmin::StudentInfoAdmin(QWidget *parent)
     , ui(new Ui::StudentInfoAdmin)
 {
     ui->setupUi(this);
+    this->setFixedSize(800,600);
+
+    QPixmap backgroundImage(":/picture/7.JPG");
+    backgroundImage = backgroundImage.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Window, backgroundImage);
+
+    this->setAutoFillBackground(true);
+
+    this->setPalette(palette);
 }
 
 StudentInfoAdmin::~StudentInfoAdmin()

@@ -3,11 +3,22 @@
 #include "ui_student_info_add.h"
 #include "student_info_query.h"
 #include <QMessageBox>
+#include <QSqlQuery>
 Student_Info_Add::Student_Info_Add(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Student_Info_Add)
 {
     ui->setupUi(this);
+    this->setFixedSize(800,600);
+
+    QPixmap backgroundImage(":/picture/7.JPG");
+    backgroundImage = backgroundImage.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Window, backgroundImage);
+
+    this->setAutoFillBackground(true);
+
+    this->setPalette(palette);
     if(this->connectDatabase("dormitory_manage_system.db")){
         //创建模型
         model=new QSqlTableModel(this);
@@ -26,7 +37,7 @@ Student_Info_Add::~Student_Info_Add()
 
 //连接数据库
 bool Student_Info_Add::connectDatabase(const QString& dbName){
-    qDebug() << QSqlDatabase::drivers();//打印数据库驱动
+    //qDebug() << QSqlDatabase::drivers();//打印数据库驱动
     //打开Sqlite
     QSqlDatabase db=QSqlDatabase::addDatabase("QSQLITE");
     //打开mysql
@@ -75,6 +86,12 @@ void Student_Info_Add::receive_add_info(QString returnWay){
 //信息提交按钮
 void Student_Info_Add::on_addCommit_clicked()
 {
+    if(ui->idEdit->text()==""|| ui->passwordEdit->text()==""){
+        QMessageBox::information(this,"提示","账号或密码不能为空",QMessageBox::Ok);
+    }else if (ui->idEdit->text().contains(" ")|| ui->passwordEdit->text().contains(" ")){
+        QMessageBox::information(this,"提示","账号或密码不能包含空格",QMessageBox::Ok);
+    }
+    else{
     QString id=ui->idEdit->text();
     QString name=ui->nameEdit->text();
     QString sex=ui->sexEdit->text();
@@ -83,7 +100,7 @@ void Student_Info_Add::on_addCommit_clicked()
     QString cla=ui->classEdit->text();
     QString phonenumber=ui->phonenumberEdit->text();
     QString roomnumber=ui->roomnumberEdit->text();
-    QString bednumber=ui->roomnumberEdit->text();
+    QString bednumber=ui->bednumberEdit->text();
     QString password=ui->passwordEdit->text();
     QString picture=ui->pictureEdit->text();
     //获得一条空记录
@@ -107,28 +124,51 @@ void Student_Info_Add::on_addCommit_clicked()
     QMessageBox::StandardButton result;
     result=QMessageBox::question(this,dlgTitle,strInfo,QMessageBox::Yes|QMessageBox::Cancel);
     if(result==QMessageBox::Yes){
-        bool res=model->submitAll();//提交记录到数据库
-        if(!res){
-            QMessageBox::information(this,"消息","数据保存错误！"+model->lastError().text());
+        QSqlQuery query;
+        query.prepare("SELECT number FROM dormitoryinfo WHERE roomnumber = :roomnumber");
+        query.bindValue(":roomnumber", roomnumber);
+        if (query.exec()) {
+            if (query.next()) {
+                int numberInt = query.value(0).toInt();
+
+                if (numberInt + 1 > 6) {
+                      model->revertAll();
+                    QMessageBox::information(this, "消息", "宿舍人数超出限制！");
+                }else{
+
+
+                    bool res=model->submitAll();//提交记录到数据库
+                    if(!res){
+                        QMessageBox::information(this,"消息","数据保存错误！"+model->lastError().text());
+                    }else{
+                    //提示添加成功
+                        QMessageBox::information(this,"个人信息添加","个人信息添加成功！",QMessageBox::Ok);}
+                    //回到查询界面
+                    if(returnWay=="添加宿舍成员"){
+                        //返回宿舍信息管理的界面
+                        Dormitory_Personnel_Details* detailWin=new Dormitory_Personnel_Details;
+                        detailWin->show();
+                        this->close();
+                    }else{
+                        Student_Info_Add *addWin=new Student_Info_Add;
+                        addWin->show();
+                        this->close();
+                    }
+
+                }
+            }else{
+                QMessageBox::information(this, "消息", "宿舍不存在！");
+            }
+
         }
-        //提示添加成功
-        QMessageBox::information(this,"个人信息添加","个人信息添加成功！",QMessageBox::Ok);
-        //回到查询界面
-        if(returnWay=="添加宿舍成员"){
-            //返回宿舍信息管理的界面
-            Dormitory_Personnel_Details* detailWin=new Dormitory_Personnel_Details;
-            detailWin->show();
-            this->close();
-        }else{
-            Student_Info_Add *addWin=new Student_Info_Add;
-            addWin->show();
-            this->close();
-        }
+
+
+
     }else if(result==QMessageBox::Cancel){
         //取消添加
         model->revertAll();
     }
-
+    }
 
 
 }

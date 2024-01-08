@@ -25,7 +25,7 @@ public:
     bool connectDatabase(const QString &dbName);
     void initButton();//为每一条记录创建一个按钮
     void delButtons();
-
+    void dormitory_newnumber();
 private slots:
     void on_ShowAllBtn_clicked();
 

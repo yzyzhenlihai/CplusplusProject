@@ -16,6 +16,7 @@
 #include <QTcpSocket>
 #include <QByteArray>
 #include<QSqlRecord>
+#include<QVector>
 namespace Ui {
 class TcpServer;
 }
@@ -35,10 +36,11 @@ public slots:
 private:
     Ui::TcpServer *ui;
     QTcpServer* m_server;//服务端
-    QTcpSocket* m_client;//与客户端数据传输
+    //QTcpSocket* m_client;//与客户端数据传输，用于通信
     QSqlTableModel *model;
-    QString m_receivedId;//保存id
+    //QString m_receivedId;//保存id
     QLabel* m_imageLabel;  // 用于显示图片的QLabel
+    QVector<QTcpSocket*> m_clients;//用来存每个客户端发起请求的socket
 };
 
 #endif // TCPSERVER_H

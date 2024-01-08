@@ -13,6 +13,16 @@ Student_Info_Query::Student_Info_Query(QWidget *parent)
     , ui(new Ui::Student_Info_Query)
 {
     ui->setupUi(this);
+    this->setFixedSize(800,600);
+
+    QPixmap backgroundImage(":/picture/7.JPG");
+    backgroundImage = backgroundImage.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Window, backgroundImage);
+
+    this->setAutoFillBackground(true);
+
+    this->setPalette(palette);
     //在构造函数实现数据库的连接
     if(this->connectDatabase("dormitory_manage_system.db")){
 
@@ -146,6 +156,8 @@ void Student_Info_Query::on_QueryBtn_clicked()
         model->setFilter(sql);
     }
     initButton();
+    int curRow=ui->ShowResult->currentIndex().row();
+
 }
 
 
@@ -161,17 +173,27 @@ void Student_Info_Query::on_AddInfoBtn_clicked()
 void Student_Info_Query::on_ModifyBtn_clicked()
 {
     delButton();
+    // int curRow=ui->ShowResult->currentIndex().row();
+    // QVariant roomnumber = ui->ShowResult->model()->data(ui->ShowResult->model()->index(curRow, 8));
+    // qDebug()<<roomnumber<<"qwe";
     //开始事务操作
     model->database().transaction();
     QString dlgTitle="修改信息消息框";
     QString strInfo="确认修改个人信息？！";
     QMessageBox::StandardButton result;
     result=QMessageBox::information(this,dlgTitle,strInfo,QMessageBox::Ok|QMessageBox::Cancel);
-    model->submitAll();
+   // model->submitAll();
     if(result==QMessageBox::Ok){
         //提交
-        model->database().commit();
+       // model->database().commit();
+        bool res=model->submitAll();//提交记录到数据库
+        if(!res){
+            QMessageBox::information(this,"消息","数据保存错误！"+model->lastError().text());
+        }else{
         QMessageBox::information(this,"修改信息","个人信息修改成功！",QMessageBox::Ok);
+        }
+
+
     }else if(result==QMessageBox::Cancel){
         //回滚
         model->database().rollback();
@@ -185,6 +207,8 @@ void Student_Info_Query::on_DeleteBtn_clicked()
     delButton();
     //获得删除行所在列
     int curRow=ui->ShowResult->currentIndex().row();
+    QVariant roomnumber = ui->ShowResult->model()->data(ui->ShowResult->model()->index(curRow, 9));
+    //qDebug()<<roomnumber<<"qwe";
     //删除改行
     model->removeRow(curRow);
     QString dlgTitle="删除信息消息框";

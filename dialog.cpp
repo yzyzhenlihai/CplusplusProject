@@ -7,7 +7,16 @@ Dialog::Dialog(QWidget *parent)
     , ui(new Ui::Dialog)
 {
     ui->setupUi(this);
+    this->setFixedSize(800,600);
 
+    QPixmap backgroundImage(":/picture/7.JPG");
+    backgroundImage = backgroundImage.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Window, backgroundImage);
+
+    this->setAutoFillBackground(true);
+
+    this->setPalette(palette);
 }
 
 Dialog::~Dialog()
@@ -20,8 +29,8 @@ Dialog::~Dialog()
 
 void Dialog::on_LoginButton_clicked()
 {
-    QString username="";
-    QString password="";
+    QString username="admin";
+    QString password="admin";
     if((ui->UserNameLineEdit->text()==username)&&ui->PasswordLineEdit->text()==password){
         AdministratorWindow *adminwin=new AdministratorWindow;
         adminwin->show();

@@ -30,6 +30,7 @@ private slots:
     void on_ReturnBtn_clicked();
 
     void on_ShowRepairBtn_clicked();
+    void on_InquireRepairBtn_clicked();
     void clickButton();//槽函数，处理报修按钮
 
 private:

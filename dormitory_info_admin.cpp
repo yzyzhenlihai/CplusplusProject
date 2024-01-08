@@ -6,6 +6,16 @@ Dormitory_Info_Admin::Dormitory_Info_Admin(QWidget *parent)
     , ui(new Ui::Dormitory_Info_Admin)
 {
     ui->setupUi(this);
+    this->setFixedSize(800,600);
+
+    QPixmap backgroundImage(":/picture/7.JPG");
+    backgroundImage = backgroundImage.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Window, backgroundImage);
+
+    this->setAutoFillBackground(true);
+
+    this->setPalette(palette);
     if(this->connectDatabase("dormitory_manage_system.db")){
         //创建模型
         model=new QSqlTableModel(this);
@@ -97,6 +107,7 @@ void Dormitory_Info_Admin::initButton(){
 void Dormitory_Info_Admin::on_ShowAllBtn_clicked()
 {
     delButtons();
+    dormitory_newnumber();
     model->setTable("dormitoryinfo");
     model->select();
     initButton();
@@ -135,7 +146,7 @@ void Dormitory_Info_Admin::on_ReturnBtn_clicked()
 void Dormitory_Info_Admin::on_QueryBtn_clicked()
 {
     delButtons();
-
+    dormitory_newnumber();
     QString queryType=ui->QueryChoice->currentText();//获得查询类型
     QString queryEdit=ui->QueryEdit->text();
     if(queryEdit==""){
@@ -155,3 +166,19 @@ void Dormitory_Info_Admin::on_QueryBtn_clicked()
 
 }
 
+void Dormitory_Info_Admin::dormitory_newnumber(){//更新每个宿舍人数
+    QSqlQuery query;
+
+    query.prepare("SELECT roomnumber, COUNT(*) AS count FROM studentinfo GROUP BY roomnumber");
+    if (query.exec()) {
+        while (query.next()) {
+            QString value = query.value(0).toString(); // 获取列中的值
+            int count = query.value(1).toInt(); // 获取每种参数的数量
+              QSqlQuery query1;
+            query1.prepare("UPDATE dormitoryinfo SET number = :numberInt WHERE roomnumber = :roomnumber");
+            query1.bindValue(":numberInt", count);
+            query1.bindValue(":roomnumber", value);
+            query1.exec();
+            qDebug() << "Value:" << value << "Count:" << count;}
+    }
+}

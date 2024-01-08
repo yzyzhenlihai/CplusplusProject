@@ -6,6 +6,16 @@ Repair_Process_Admin::Repair_Process_Admin(QWidget *parent)
     , ui(new Ui::Repair_Process_Admin)
 {
     ui->setupUi(this);
+    this->setFixedSize(800,600);
+
+    QPixmap backgroundImage(":/picture/7.JPG");
+    backgroundImage = backgroundImage.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Window, backgroundImage);
+
+    this->setAutoFillBackground(true);
+
+    this->setPalette(palette);
     if(this->connectDatabase("dormitory_manage_system.db")){
         model=new QSqlTableModel(this);
         model->setTable("repairprocess");
@@ -113,6 +123,16 @@ void Repair_Process_Admin::on_ShowRepairBtn_clicked()
 {
     delButtons();
     model->setFilter("");
+    model->select();
+    initButton();
+}
+
+void Repair_Process_Admin::on_InquireRepairBtn_clicked()
+{
+    delButtons();
+    model->setFilter("");
+    QString selectedValue = ui->comboBox->currentText(); // 获取ComboBox当前选中的文本值
+    model->setFilter(QString("RepairResult = '%1'").arg(selectedValue));
     model->select();
     initButton();
 }

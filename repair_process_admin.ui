@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>398</height>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -46,8 +46,8 @@
    <widget class="QPushButton" name="ReturnBtn">
     <property name="geometry">
      <rect>
-      <x>570</x>
-      <y>340</y>
+      <x>590</x>
+      <y>490</y>
       <width>81</width>
       <height>31</height>
      </rect>
@@ -59,14 +59,47 @@
    <widget class="QPushButton" name="ShowRepairBtn">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>330</y>
+      <x>80</x>
+      <y>490</y>
       <width>81</width>
       <height>31</height>
      </rect>
     </property>
     <property name="text">
      <string>显示报修信息</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>490</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>待处理</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>已处理</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QPushButton" name="InquireRepairBtn">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>490</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>查询</string>
     </property>
    </widget>
   </widget>
