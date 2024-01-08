@@ -173,6 +173,7 @@ void Student_Info_Query::on_AddInfoBtn_clicked()
 void Student_Info_Query::on_ModifyBtn_clicked()
 {
     delButton();
+
     // int curRow=ui->ShowResult->currentIndex().row();
     // QVariant roomnumber = ui->ShowResult->model()->data(ui->ShowResult->model()->index(curRow, 8));
     // qDebug()<<roomnumber<<"qwe";

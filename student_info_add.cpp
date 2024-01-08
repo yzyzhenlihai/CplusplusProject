@@ -189,12 +189,12 @@ void Student_Info_Add::on_addPictureBtn_clicked()
         QImage originalImage;
         originalImage.loadFromData(imageData);
         //压缩图片
-        QSize newSize(800, 600); // 指定新的大小
+        QSize newSize(500, 500); // 指定新的大小
         QImage scaledImage = originalImage.scaled(newSize, Qt::KeepAspectRatio); // 压缩图片到指定大小，保持原始图片的宽高
         QByteArray compressedData;
         QBuffer buffer(&compressedData);
         buffer.open(QIODevice::WriteOnly);
-        scaledImage.save(&buffer, "JPEG", 50);//压缩比，压缩质量
+        scaledImage.save(&buffer, "JPEG", 80);//压缩比，压缩质量
         buffer.close();
         file.close();
         //添加至数据库
