@@ -175,8 +175,8 @@ void Student_Info_Query::on_ModifyBtn_clicked()
 {
     delButton();
 
-     int curRow=ui->ShowResult->currentIndex().row();
-     QVariant roomnumber = ui->ShowResult->model()->data(ui->ShowResult->model()->index(curRow, 8));
+    int curRow=ui->ShowResult->currentIndex().row();
+    QVariant roomnumber = ui->ShowResult->model()->data(ui->ShowResult->model()->index(curRow, 8));
 
     //开始事务操作
     model->database().transaction();
@@ -184,32 +184,23 @@ void Student_Info_Query::on_ModifyBtn_clicked()
     QString strInfo="确认修改个人信息？！";
     QMessageBox::StandardButton result;
     result=QMessageBox::information(this,dlgTitle,strInfo,QMessageBox::Ok|QMessageBox::Cancel);
-   // model->submitAll();
+
     if(result==QMessageBox::Ok){
         //提交
-        model->database().commit();
-        QSqlQuery query1;
-        query1.prepare("SELECT number FROM dormitoryinfo WHERE roomnumber = :roomnumber");
-        query1.bindValue(":roomnumber", roomnumber);
-        if (query1.exec()) {
-            if (query1.next()) {
-                int numberInt = query1.value(0).toInt();
+        if(model->submitAll()){
 
-                if (numberInt >=6) {
-                   // model->revertAll();
-                     model->database().rollback();
-                    QMessageBox::information(this, "消息", "宿舍人数超出限制！");
-                }else{
-        bool res=model->submitAll();//提交记录到数据库
-        if(!res){
-            QMessageBox::information(this,"消息","数据保存错误！"+model->lastError().text());
-        }else{
-           Student_Info_Query::dormitory_newnumber();
-        QMessageBox::information(this,"修改信息","个人信息修改成功！",QMessageBox::Ok);
-        }
-        }
-                }
+            bool res=model->database().commit();//提交记录到数据库
+            if(!res){
+                QMessageBox::information(this,"消息","数据保存错误！"+model->lastError().text());
+            }else{
+                Student_Info_Query::dormitory_newnumber();
+               QMessageBox::information(this,"修改信息","个人信息修改成功！",QMessageBox::Ok);
+
             }
+        }else{
+            QMessageBox::information(this,"消息","宿舍已满或床号冲突！");
+        }
+
     }else if(result==QMessageBox::Cancel){
         //回滚
         model->database().rollback();

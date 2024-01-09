@@ -124,42 +124,22 @@ void Student_Info_Add::on_addCommit_clicked()
     QMessageBox::StandardButton result;
     result=QMessageBox::question(this,dlgTitle,strInfo,QMessageBox::Yes|QMessageBox::Cancel);
     if(result==QMessageBox::Yes){
-        QSqlQuery query;
-        query.prepare("SELECT number FROM dormitoryinfo WHERE roomnumber = :roomnumber");
-        query.bindValue(":roomnumber", roomnumber);
-        if (query.exec()) {
-            if (query.next()) {
-                int numberInt = query.value(0).toInt();
-
-                if (numberInt >=6) {
-                      model->revertAll();
-                    QMessageBox::information(this, "消息", "宿舍人数超出限制！");
-                }else{
-
-
-                    bool res=model->submitAll();//提交记录到数据库
-                    if(!res){
-                        QMessageBox::information(this,"消息","数据保存错误！"+model->lastError().text());
-                    }else{
-                    //提示添加成功
-                        QMessageBox::information(this,"个人信息添加","个人信息添加成功！",QMessageBox::Ok);}
-                    //回到查询界面
-                    if(returnWay=="添加宿舍成员"){
-                        //返回宿舍信息管理的界面
-                        Dormitory_Personnel_Details* detailWin=new Dormitory_Personnel_Details;
-                        detailWin->show();
-                        this->close();
-                    }else{
-                        Student_Info_Add *addWin=new Student_Info_Add;
-                        addWin->show();
-                        this->close();
-                    }
-
-                }
-            }else{
-                QMessageBox::information(this, "消息", "宿舍不存在！");
-            }
-
+        bool res=model->submitAll();//提交记录到数据库
+        if(!res){
+            QMessageBox::information(this,"消息","数据保存失败原因："+model->lastError().text());
+        }else{
+            //提示添加成功
+            QMessageBox::information(this,"个人信息添加","个人信息添加成功！",QMessageBox::Ok);}
+        //回到查询界面
+        if(returnWay=="添加宿舍成员"){
+            //返回宿舍信息管理的界面
+            Dormitory_Personnel_Details* detailWin=new Dormitory_Personnel_Details;
+            detailWin->show();
+            this->close();
+        }else{
+            Student_Info_Add *addWin=new Student_Info_Add;
+            addWin->show();
+            this->close();
         }
 
         Student_Info_Query::dormitory_newnumber();
