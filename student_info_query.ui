@@ -17,10 +17,10 @@
    <widget class="QTableView" name="ShowResult">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>40</x>
       <y>40</y>
       <width>611</width>
-      <height>171</height>
+      <height>271</height>
      </rect>
     </property>
    </widget>
@@ -47,7 +47,7 @@
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>290</y>
+      <y>370</y>
       <width>81</width>
       <height>31</height>
      </rect>
@@ -67,7 +67,7 @@
     <property name="geometry">
      <rect>
       <x>160</x>
-      <y>290</y>
+      <y>370</y>
       <width>321</width>
       <height>31</height>
      </rect>
@@ -77,7 +77,7 @@
     <property name="geometry">
      <rect>
       <x>540</x>
-      <y>290</y>
+      <y>370</y>
       <width>91</width>
       <height>31</height>
      </rect>

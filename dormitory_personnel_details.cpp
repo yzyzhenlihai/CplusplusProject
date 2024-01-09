@@ -1,6 +1,11 @@
 #include "dormitory_personnel_details.h"
 #include "ui_dormitory_personnel_details.h"
-
+#include "student_info_query.h"
+#include <QSqlTableModel>
+#include<QtSql/QSqlDatabase>
+#include<QDebug>
+#include <QSqlError>
+#include <QSqlQuery>
 Dormitory_Personnel_Details::Dormitory_Personnel_Details(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Dormitory_Personnel_Details)
@@ -96,16 +101,39 @@ void Dormitory_Personnel_Details::on_ShowAllStu_clicked()
 void Dormitory_Personnel_Details::on_ModifyBtn_clicked()
 {
     //开始事务操作
+    int curRow=ui->ShowDormitoryInfo->currentIndex().row();
+    QVariant roomnumber = ui->ShowDormitoryInfo->model()->data(ui->ShowDormitoryInfo->model()->index(curRow, 8));
+     qDebug()<<roomnumber<<"qwe";
     model->database().transaction();
     QString dlgTitle="修改信息消息框";
     QString strInfo="确认修改个人信息？！";
     QMessageBox::StandardButton result;
     result=QMessageBox::information(this,dlgTitle,strInfo,QMessageBox::Ok|QMessageBox::Cancel);
-    model->submitAll();
+    //model->submitAll();
     if(result==QMessageBox::Ok){
         //提交
-        model->database().commit();
-        QMessageBox::information(this,"修改信息","个人信息修改成功！",QMessageBox::Ok);
+         model->database().commit();
+        QSqlQuery query1;
+        query1.prepare("SELECT number FROM dormitoryinfo WHERE roomnumber = :roomnumber");
+        query1.bindValue(":roomnumber", roomnumber);
+        if (query1.exec()) {
+            if (query1.next()) {
+                int numberInt = query1.value(0).toInt();
+                if (numberInt >=6) {
+                    // model->revertAll();
+                    model->database().rollback();
+                    QMessageBox::information(this, "消息", "宿舍人数超出限制！");
+                }else{
+                    bool res=model->submitAll();//提交记录到数据库
+                    if(!res){
+                        QMessageBox::information(this,"消息","数据保存错误！"+model->lastError().text());
+                    }else{
+                        Student_Info_Query::dormitory_newnumber();
+                        QMessageBox::information(this,"修改信息","个人信息修改成功！",QMessageBox::Ok);
+                    }
+                }
+            }
+        }
     }else if(result==QMessageBox::Cancel){
         //回滚
         model->database().rollback();
@@ -125,6 +153,7 @@ void Dormitory_Personnel_Details::on_DeleteBtn_clicked()
     if(ok==QMessageBox::Ok){
         //提交修改
         model->submitAll();
+       Student_Info_Query::dormitory_newnumber();
         QMessageBox::information(this,"删除信息","个人信息删除成功！",QMessageBox::Ok);
 
     }else{

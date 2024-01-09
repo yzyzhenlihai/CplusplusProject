@@ -155,8 +155,9 @@ void Student_Info_Query::on_QueryBtn_clicked()
         QString sql="roomnumber="+queryContent;
         model->setFilter(sql);
     }
+    Student_Info_Query::dormitory_newnumber();
     initButton();
-    int curRow=ui->ShowResult->currentIndex().row();
+   // int curRow=ui->ShowResult->currentIndex().row();
 
 }
 
@@ -174,9 +175,9 @@ void Student_Info_Query::on_ModifyBtn_clicked()
 {
     delButton();
 
-    // int curRow=ui->ShowResult->currentIndex().row();
-    // QVariant roomnumber = ui->ShowResult->model()->data(ui->ShowResult->model()->index(curRow, 8));
-    // qDebug()<<roomnumber<<"qwe";
+     int curRow=ui->ShowResult->currentIndex().row();
+     QVariant roomnumber = ui->ShowResult->model()->data(ui->ShowResult->model()->index(curRow, 8));
+
     //开始事务操作
     model->database().transaction();
     QString dlgTitle="修改信息消息框";
@@ -186,15 +187,29 @@ void Student_Info_Query::on_ModifyBtn_clicked()
    // model->submitAll();
     if(result==QMessageBox::Ok){
         //提交
-       // model->database().commit();
+        model->database().commit();
+        QSqlQuery query1;
+        query1.prepare("SELECT number FROM dormitoryinfo WHERE roomnumber = :roomnumber");
+        query1.bindValue(":roomnumber", roomnumber);
+        if (query1.exec()) {
+            if (query1.next()) {
+                int numberInt = query1.value(0).toInt();
+
+                if (numberInt >=6) {
+                   // model->revertAll();
+                     model->database().rollback();
+                    QMessageBox::information(this, "消息", "宿舍人数超出限制！");
+                }else{
         bool res=model->submitAll();//提交记录到数据库
         if(!res){
             QMessageBox::information(this,"消息","数据保存错误！"+model->lastError().text());
         }else{
+           Student_Info_Query::dormitory_newnumber();
         QMessageBox::information(this,"修改信息","个人信息修改成功！",QMessageBox::Ok);
         }
-
-
+        }
+                }
+            }
     }else if(result==QMessageBox::Cancel){
         //回滚
         model->database().rollback();
@@ -218,6 +233,7 @@ void Student_Info_Query::on_DeleteBtn_clicked()
     if(ok==QMessageBox::Ok){
         //提交修改
         model->submitAll();
+        dormitory_newnumber();
         QMessageBox::information(this,"删除信息","个人信息删除成功！",QMessageBox::Ok);
 
     }else{
@@ -227,4 +243,48 @@ void Student_Info_Query::on_DeleteBtn_clicked()
     initButton();
 
 }
+/*
+void Student_Info_Query::dormitory_newnumber(){//更新每个宿舍人数
+    QSqlQuery query;
 
+    query.prepare("SELECT roomnumber, COUNT(*) AS count FROM studentinfo GROUP BY roomnumber");
+    if (query.exec()) {
+        while (query.next()) {
+            QString value = query.value(0).toString(); // 获取列中的值
+            int count = query.value(1).toInt(); // 获取每种参数的数量
+              QSqlQuery query1;
+            query1.prepare("UPDATE dormitoryinfo SET number = :numberInt WHERE roomnumber = :roomnumber");
+            query1.bindValue(":numberInt", count);
+            query1.bindValue(":roomnumber", value);
+            query1.exec();
+            qDebug() << "Value:" << value << "Count:" << count;}
+    }
+}
+*/
+void Student_Info_Query::dormitory_newnumber() {
+    QSqlQuery query;
+
+    query.prepare("SELECT d.roomnumber, COALESCE(s.count, 0) AS count "
+                  "FROM dormitoryinfo d "
+                  "LEFT JOIN (SELECT roomnumber, COUNT(*) AS count FROM studentinfo GROUP BY roomnumber) s "
+                  "ON d.roomnumber = s.roomnumber");
+
+    if (query.exec()) {
+        while (query.next()) {
+            QString value = query.value(0).toString(); // 获取列中的值
+            int count = query.value(1).toInt(); // 获取每种参数的数量
+
+            QSqlQuery updateQuery;
+            updateQuery.prepare("UPDATE dormitoryinfo SET number = :numberInt WHERE roomnumber = :roomnumber");
+            updateQuery.bindValue(":numberInt", count);
+            updateQuery.bindValue(":roomnumber", value);
+
+            if (!updateQuery.exec()) {
+                qDebug() << "更新宿舍信息失败，房间号：" << value;
+            }
+            qDebug() << "房间号：" << value << "人数：" << count;
+        }
+    } else {
+        qDebug() << "更新宿舍信息查询失败";
+    }
+}

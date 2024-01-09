@@ -131,7 +131,7 @@ void Student_Info_Add::on_addCommit_clicked()
             if (query.next()) {
                 int numberInt = query.value(0).toInt();
 
-                if (numberInt + 1 > 6) {
+                if (numberInt >=6) {
                       model->revertAll();
                     QMessageBox::information(this, "消息", "宿舍人数超出限制！");
                 }else{
@@ -162,8 +162,7 @@ void Student_Info_Add::on_addCommit_clicked()
 
         }
 
-
-
+        Student_Info_Query::dormitory_newnumber();
     }else if(result==QMessageBox::Cancel){
         //取消添加
         model->revertAll();

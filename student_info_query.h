@@ -22,7 +22,7 @@ public:
     bool connectDatabase(const QString &dbName);
     void initButton();
     void delButton();
-
+    static void dormitory_newnumber();
 private slots:
     void on_ReturnBtn_clicked();
 
